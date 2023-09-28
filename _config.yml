@@ -34,7 +34,7 @@ google_analytics: G-JRC3QSTQ1Q
 
 # Build settings
 theme: minima
-show_excerpts: false
+show_excerpts: true
 plugins:
   - jekyll-feed
 
