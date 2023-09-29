@@ -2,6 +2,7 @@
 layout: post
 title:  "Hello World"
 date:   2023-09-10 16:44:31 -0700
+excerpt_separator: <!--more-->
 categories: 
 ---
 Over the years, I've tried many different flavors of personal website,
