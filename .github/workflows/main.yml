@@ -15,7 +15,7 @@ jobs:
         ruby-version: '2.7'
     - run: gem install bundler
     - run: bundle install
-    - run: bundle exec jekyll build
+    - run: JEKYLL_ENV=production bundle exec jekyll build
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
