@@ -16,8 +16,6 @@ solve all of your problems.
 
 I think this is a mistake.
 
-<!-- more -->
-
 It has very difficult to identify the things you **do** want from your
 job. These things are rarely obvious. But you have to identify those
 things before you can know if 1) your current job isn't going to work
