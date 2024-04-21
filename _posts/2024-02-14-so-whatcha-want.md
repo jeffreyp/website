@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "So Whatcha Want?"
+excerpt_separator: <!-- more -->
 ---
 
 I've shared this advice with a couple of people in the last few days
@@ -14,6 +15,8 @@ to start believing that the grass is greener and a job change will
 solve all of your problems.
 
 I think this is a mistake.
+
+<!-- more -->
 
 It has very difficult to identify the things you **do** want from your
 job. These things are rarely obvious. But you have to identify those
