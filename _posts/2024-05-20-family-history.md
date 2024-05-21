@@ -22,4 +22,4 @@ I have the court records and sadly there is no transcript, so I'll never really 
 On his deathbed in 1897, he made a statement that was published in the P-I. "I am sure," he said, "that none of the blows I struck Mr. Dobson were instrumental in causing his death...The blows that I struck were nothing more than would be given in any ordinary fight." He went on to say Dobson died when he fell and hit his head on a pointed tree stump. 
 
 P.J. is buried in an unmarked grave at Lake View Cemetery. Last time I was in the neighborhood, his house was still standing--expanded from original form and now a small apartment building. I wonder if anyone who lives there knows its history? And my family has now lived in Seattle for five generations and counting.
-EDIT: added a couple of clippings from the Seattle P-I.
+
