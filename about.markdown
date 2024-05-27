@@ -8,8 +8,8 @@ Hi!
 ![image me](/assets/images/me.jpg)
 
 I live in West Seattle with my wife, two children, and two cats. I am
-  a lifelong Seattleite, and some of my ancestors were in Seattle in
-  the late 1880's. The roots run deep! I like to travel and see new
+  a lifelong Seattleite, and [some of my ancestors were in Seattle in
+  the late 1880's](http://jeffreypratt.org/2024/05/20/family-history.html). The roots run deep! I like to travel and see new
   things/meet new people, but returning home is always a delight
   (especially on an airplane with the stellar views of mountains and
   water).
