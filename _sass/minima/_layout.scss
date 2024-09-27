@@ -191,6 +191,8 @@
 .post-list {
   margin-left: 0;
   list-style: none;
+  text-align: justify;
+  text-justify: inter-word;
 
   > li {
     margin-bottom: $spacing-unit;
