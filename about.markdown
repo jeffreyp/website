@@ -1,10 +1,8 @@
 ---
 layout: page
-title: About
+title: About Me
 permalink: /about/
 ---
-Hi!
-
 ![image me](/assets/images/me.jpg)
 
 I live in West Seattle with my wife, two children, and two cats. I am
