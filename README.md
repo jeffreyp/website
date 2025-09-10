@@ -1,2 +1,2 @@
 # website
-A place for my stuff.
+This is a place for my stuff. There are many like it, but this one is mine.
