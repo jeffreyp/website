@@ -11,8 +11,6 @@ weirdo hand-rolled "convert markdown to HTML using a Makefile and some
 shell scripts" solution. ~~Seems like GitHub pages are the latest craze,
 so I thought I'd give it a whirl and see what happens.~~
 
-![image hello](/assets/images/hello.png)
-
 **Update:** Yeah, that was fun. GitHub pages are all fine and dandy
 but I can just as easily roll my own. Jekyll generates a static
 website--so it doesn't really matter whether I use GitHub pages or
