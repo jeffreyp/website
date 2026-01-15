@@ -12,8 +12,8 @@ I live in West Seattle with my wife, two children, and two cats. I am
   (especially on an airplane with the stellar views of mountains and
   water).
   
-I am the 100th longest tenured active employee at Amazon.com (as of
-  September 11, 2023). This factoid isn't all that impressive to me,
+I am the 74th longest tenured active employee at Amazon.com (as of
+  January 14, 2026). This factoid isn't all that impressive to me,
   since I have good friends who are in the top 10. But for some
   reason, it interests people, so I'll share it. Maybe someday I'll write
   something about all the myriad ways in which Amazon has changed
