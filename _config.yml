@@ -32,7 +32,7 @@ lord-stanley:
     - { platform: twitter,  user_url: "https://twitter.com/jeffreypratt" }
     - { platform: linkedin, user_url: "https://linkedin.com/in/jeffreyp" }
     - { platform: smugmug,  user_url: "https://jeffreypratt.smugmug.com" }
-    - { platform: instagram, user_url: "https://www.instagram.dom/pratt_jeffrey" }
+    - { platform: instagram, user_url: "https://www.instagram.com/pratt_jeffrey" }
     - { platform: pinboard, user_url: "https://pinboard.in/u:jeffreyp/" }
 
 google_analytics: G-JRC3QSTQ1Q
