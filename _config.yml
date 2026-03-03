@@ -37,6 +37,9 @@ lord-stanley:
 
 google_analytics: G-JRC3QSTQ1Q
 
+header_pages:
+  - about.markdown
+
 # Build settings
 #theme: minima
 show_excerpts: true
