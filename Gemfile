@@ -16,6 +16,7 @@ gem "jekyll-remote-theme"
 # gem "github-pages", group: :jekyll_plugins
 # If you have any plugins, put them here!
 group :jekyll_plugins do
+  gem "jekyll-archives"
   gem "jekyll-feed", "~> 0.17"
   gem "jekyll-seo-tag"
   gem "jekyll-sitemap"
