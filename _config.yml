@@ -43,8 +43,20 @@ show_excerpts: true
 plugins:
   - jekyll-feed
   - jekyll-remote-theme
+  - jekyll-archives
 
 remote_theme: jeffreyp/lord-stanley
+
+jekyll-archives:
+  enabled: [year, month, day]
+  layouts:
+    year: archive
+    month: archive
+    day: archive
+  permalinks:
+    year: "/:year/"
+    month: "/:year/:month/"
+    day: "/:year/:month/:day/"
 
 # Exclude from processing.
 # The following items will not be processed, by default.
