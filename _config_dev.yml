@@ -1,0 +1,12 @@
+# Development-only config overrides
+# Usage: bundle exec jekyll serve --config _config.yml,_config_dev.yml
+
+# Use local lord-stanley theme instead of remote
+remote_theme: null
+theme: lord-stanley
+plugins:
+  - jekyll-feed
+  - jekyll-paginate
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-archives

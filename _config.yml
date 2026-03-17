@@ -43,8 +43,11 @@ header_pages:
 # Build settings
 #theme: minima
 show_excerpts: true
+paginate: 5
+paginate_path: "/page:num/"
 plugins:
   - jekyll-feed
+  - jekyll-paginate
   - jekyll-remote-theme
   - jekyll-archives
 
