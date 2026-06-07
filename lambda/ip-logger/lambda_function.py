@@ -26,7 +26,7 @@ STATE_KEY = os.environ.get("STATE_KEY", "ipinfo/processed_logs.json")
 IPINFO_TOKEN_PARAM = os.environ.get("IPINFO_TOKEN_PARAM", "/jeffreypratt/ipinfo_token")
 REPORT_EMAIL_TO = os.environ.get("REPORT_EMAIL_TO", "")
 REPORT_EMAIL_FROM = os.environ.get("REPORT_EMAIL_FROM", "")
-SES_REGION = os.environ.get("SES_REGION", "us-east-1")
+SES_REGION = os.environ.get("SES_REGION", "us-west-2")
 IPINFO_RATE_LIMIT_DELAY = 0.05  # seconds between requests (~20 req/s, well under free tier)
 
 # S3 access log format:
