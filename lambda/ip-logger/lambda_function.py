@@ -1,14 +1,15 @@
 """
 Parses S3 access logs from logs.jeffreypratt.org/logs/,
 looks up new IPs via ipinfo.io, appends records to
-logs.jeffreypratt.org/ipinfo/ips.csv, and emails a per-run
-report showing every request seen in newly processed log files.
+logs.jeffreypratt.org/ipinfo/ips.csv, and emails a summary
+report (new IPs, top IPs, top URIs) for the run.
 
 Tracks processed log files in logs.jeffreypratt.org/ipinfo/processed_logs.json
 so each file is only read once.
 """
 
 import boto3
+import collections
 import csv
 import io
 import json
@@ -28,6 +29,7 @@ REPORT_EMAIL_TO = os.environ.get("REPORT_EMAIL_TO", "")
 REPORT_EMAIL_FROM = os.environ.get("REPORT_EMAIL_FROM", "")
 SES_REGION = os.environ.get("SES_REGION", "us-west-2")
 IPINFO_RATE_LIMIT_DELAY = 0.05  # seconds between requests (~20 req/s, well under free tier)
+TOP_N = 20  # rows in top-IPs and top-URIs email tables
 
 # S3 access log format:
 # BucketOwner Bucket [Time] RemoteIP Requester RequestID Operation Key "Request-URI" ...
@@ -155,13 +157,15 @@ def lookup_ip(ip, token):
         return None
 
 
-def append_records_to_csv(records):
-    """Read existing CSV from S3, append new rows, write back."""
-    try:
-        resp = s3.get_object(Bucket=BUCKET, Key=CSV_KEY)
-        existing = resp["Body"].read().decode("utf-8")
-    except s3.exceptions.NoSuchKey:
-        existing = ""
+def append_records_to_csv(records, existing=None):
+    """Append new rows to the CSV. Reads S3 once if existing content not supplied;
+    returns the updated content so callers can pass it on subsequent calls."""
+    if existing is None:
+        try:
+            resp = s3.get_object(Bucket=BUCKET, Key=CSV_KEY)
+            existing = resp["Body"].read().decode("utf-8")
+        except s3.exceptions.NoSuchKey:
+            existing = ""
 
     buf = io.StringIO()
     buf.write(existing)
@@ -172,60 +176,85 @@ def append_records_to_csv(records):
     for r in records:
         writer.writerow([r["ip"], r["hostname"], r["city"], r["region"], r["country"], r["postal"], r["timezone"]])
 
+    updated = buf.getvalue()
     s3.put_object(
         Bucket=BUCKET,
         Key=CSV_KEY,
-        Body=buf.getvalue().encode("utf-8"),
+        Body=updated.encode("utf-8"),
         ContentType="text/csv",
     )
+    return updated
 
 
-def build_email_html(report_rows, total_new_ips, new_log_files, run_time):
-    rows_html = ""
-    for row in report_rows:
-        rows_html += (
-            "<tr>"
-            f"<td>{row['timestamp']}</td>"
-            f"<td>{row['ip']}</td>"
-            f"<td>{row['hostname']}</td>"
-            f"<td>{row['city']}</td>"
-            f"<td>{row['region']}</td>"
-            f"<td>{row['country']}</td>"
-            f"<td style='word-break:break-all'>{row['uri']}</td>"
-            "</tr>\n"
+TABLE_STYLE = 'border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px"'
+TH_STYLE = 'style="background:#f0f0f0;text-align:left"'
+
+
+def _table(headers, rows):
+    ths = "".join(f"<th>{h}</th>" for h in headers)
+    trs = "".join(
+        "<tr>" + "".join(f"<td style='word-break:break-all'>{c}</td>" for c in row) + "</tr>\n"
+        for row in rows
+    )
+    return f'<table {TABLE_STYLE}><tr {TH_STYLE}>{ths}</tr>\n{trs}</table>'
+
+
+def build_email_html(new_ip_records, top_ips, top_uris, total_requests, new_log_files, run_time):
+    total_new_ips = len(new_ip_records)
+
+    if new_ip_records:
+        new_ip_table = _table(
+            ["IP", "Hostname", "City", "Region", "Country"],
+            [(r["ip"], r["hostname"], r["city"], r["region"], r["country"]) for r in new_ip_records],
         )
+        new_ip_section = f"<h3 style='margin-top:24px'>New IPs &mdash; {total_new_ips}</h3>{new_ip_table}"
+    else:
+        new_ip_section = "<p style='color:#666'>No new IPs this run.</p>"
+
+    top_ip_table = _table(
+        ["IP", "City", "Country", "Requests"],
+        [(ip, city, country, count) for ip, city, country, count in top_ips],
+    )
+
+    top_uri_table = _table(
+        ["URI", "Requests"],
+        [(uri, count) for uri, count in top_uris],
+    )
 
     return f"""<html><body style="font-family:sans-serif;font-size:14px;color:#222">
 <h2 style="margin-bottom:4px">IP Logger Report</h2>
 <p style="color:#666;margin-top:0">
   {run_time} &mdash; {new_log_files} log file(s) processed,
-  {total_new_ips} new IP(s), {len(report_rows)} request(s)
+  {total_new_ips} new IP(s), {total_requests} request(s)
 </p>
-<table border="1" cellpadding="6" cellspacing="0"
-       style="border-collapse:collapse;font-size:13px;width:100%">
-  <tr style="background:#f0f0f0;text-align:left">
-    <th>Timestamp</th>
-    <th>IP</th>
-    <th>Hostname</th>
-    <th>City</th>
-    <th>Region</th>
-    <th>Country</th>
-    <th>URI</th>
-  </tr>
-{rows_html}</table>
+{new_ip_section}
+<h3 style="margin-top:24px">Top {TOP_N} IPs by Request Count</h3>
+{top_ip_table}
+<h3 style="margin-top:24px">Top {TOP_N} URIs by Request Count</h3>
+{top_uri_table}
 </body></html>"""
 
 
-def send_email_report(report_rows, total_new_ips, new_log_files):
-    if not report_rows:
+def send_email_report(new_ip_records, ip_counts, uri_counts, total_requests, new_log_files, ip_data):
+    if total_requests == 0:
         print("No new log entries — skipping email report.")
         return
     if not REPORT_EMAIL_TO or not REPORT_EMAIL_FROM:
         print("REPORT_EMAIL_TO/FROM not set — skipping email report.")
         return
+
     run_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    subject = f"IP Logger — {run_time} — {len(report_rows)} request(s)"
-    html = build_email_html(report_rows, total_new_ips, new_log_files, run_time)
+    subject = (
+        f"IP Logger — {run_time} — {total_requests} request(s), {len(new_ip_records)} new IP(s)"
+    )
+
+    top_ips = [
+        (ip, ip_data.get(ip, {}).get("city", "—"), ip_data.get(ip, {}).get("country", "—"), count)
+        for ip, count in ip_counts.most_common(TOP_N)
+    ]
+    top_uris = uri_counts.most_common(TOP_N)
+
+    html = build_email_html(new_ip_records, top_ips, top_uris, total_requests, new_log_files, run_time)
     try:
         ses.send_email(
             Source=REPORT_EMAIL_FROM,
@@ -249,9 +278,12 @@ def lambda_handler(event, context):
     # partial results and exit cleanly before Lambda kills the process.
     TIME_BUFFER_MS = 30_000
 
-    total_new_ips = 0
     new_log_files = 0
-    report_rows = []
+    new_ip_records = []   # geo dicts for IPs seen for the first time this run
+    ip_counts = collections.Counter()
+    uri_counts = collections.Counter()
+    total_requests = 0
+    csv_content = None    # loaded once on first CSV write, threaded through subsequent calls
 
     for key in list_log_keys():
         if key in processed:
@@ -277,25 +309,17 @@ def lambda_handler(event, context):
             if info:
                 records.append(info)
                 ip_data[ip] = info
+                new_ip_records.append(info)
             time.sleep(IPINFO_RATE_LIMIT_DELAY)
 
         if records:
-            append_records_to_csv(records)
-            total_new_ips += len(records)
+            # Pass csv_content through so S3 is read at most once across the whole run.
+            csv_content = append_records_to_csv(records, csv_content)
 
-        # Build report rows for all entries in this file (geo info may be partial
-        # if interrupted mid-lookup, but include what we have)
-        for ip, timestamp, uri in entries:
-            geo = ip_data.get(ip, {})
-            report_rows.append({
-                "timestamp": timestamp,
-                "ip": ip,
-                "hostname": geo.get("hostname", "—"),
-                "city": geo.get("city", "—"),
-                "region": geo.get("region", "—"),
-                "country": geo.get("country", "—"),
-                "uri": uri,
-            })
+        for ip, _ts, uri in entries:
+            ip_counts[ip] += 1
+            uri_counts[uri] += 1
+        total_requests += len(entries)
 
         if interrupted:
             break
@@ -304,6 +328,7 @@ def lambda_handler(event, context):
         save_state(processed)
         new_log_files += 1
 
-    send_email_report(report_rows, total_new_ips, new_log_files)
+    send_email_report(new_ip_records, ip_counts, uri_counts, total_requests, new_log_files, ip_data)
+    total_new_ips = len(new_ip_records)
     print(f"Run complete: {total_new_ips} new IPs, {new_log_files} log files processed")
     return {"new_ips": total_new_ips, "new_log_files": new_log_files}
