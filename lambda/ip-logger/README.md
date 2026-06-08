@@ -37,7 +37,7 @@ The email report columns are: `timestamp, ip, hostname, city, region, country, u
 | `IPINFO_TOKEN_PARAM` | `/jeffreypratt/ipinfo_token` | SSM parameter name for the ipinfo token |
 | `REPORT_EMAIL_TO` | *(required)* | Recipient for the run report |
 | `REPORT_EMAIL_FROM` | *(required)* | SES verified sender address |
-| `SES_REGION` | `us-east-1` | AWS region where SES is configured |
+| `SES_REGION` | `us-west-2` | AWS region where SES is configured |
 
 ## Backlog handling
 
