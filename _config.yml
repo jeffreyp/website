@@ -26,6 +26,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://jeffreypratt.org"
 
 lord-stanley:
+  skin: classic
   social_links:
     - { platform: facebook, user_url: "https://facebook.com/jeffreypratt" }
     - { platform: github,   user_url: "https://github.com/jeffreyp" }
