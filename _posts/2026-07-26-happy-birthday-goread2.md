@@ -8,7 +8,7 @@ A little over a year ago, after having discovered Claude Code, I decided to resu
 Here's one way to look at it:
 
 <div class="photo-full-width" markdown="1">
-![image github](/assets/images/goread-commits.png)
+![image github](/assets/images/goread-commits.png){: width="600" }
 </div>
 
 I created a web app first, which took most of last year to finally get into a state where I was happy with it and was using it exclusively in place of Reeder. Then there was a lull with just minor polish and tweaking. Finally, early this summer, I decided to make some larger changes including starting work on an iOS mobile app which is only just now starting to come together.
