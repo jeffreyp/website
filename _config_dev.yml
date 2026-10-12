@@ -6,7 +6,7 @@ remote_theme: null
 theme: lord-stanley
 plugins:
   - jekyll-feed
-  - jekyll-paginate
+  - jekyll-paginate-v2
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-archives
