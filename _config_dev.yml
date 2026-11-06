@@ -1,5 +1,9 @@
 # Development-only config overrides
-# Usage: bundle exec jekyll serve --config _config.yml,_config_dev.yml
+# Requires a lord-stanley checkout next to this repo.
+# Usage:
+#   export BUNDLE_GEMFILE=gemfiles/dev.gemfile
+#   bundle install
+#   bundle exec jekyll serve --config _config.yml,_config_dev.yml
 
 # Use local lord-stanley theme instead of remote
 remote_theme: null

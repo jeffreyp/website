@@ -1,0 +1,5 @@
+# Local development only: builds against a lord-stanley checkout next to this
+# repo. See _config_dev.yml for usage. The deploy uses the main Gemfile.
+eval_gemfile "../Gemfile"
+
+gem "lord-stanley", path: "../../lord-stanley"

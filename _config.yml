@@ -43,6 +43,9 @@ header_pages:
 
 # Build settings
 #theme: minima
+sass:
+  style: compressed
+  sourcemap: development
 show_excerpts: true
 pagination:
   enabled: true
