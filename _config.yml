@@ -23,7 +23,7 @@ email: jeffrey (at) jeffreypratt.org
 description: >- # this means to ignore newlines until "baseurl:"
   My little corner of the internet
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://jeffreypratt.org"
+url: "http://jeffreypratt.org"
 
 lord-stanley:
   skin: classic
