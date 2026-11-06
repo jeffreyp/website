@@ -27,6 +27,10 @@ url: "https://jeffreypratt.org"
 
 lord-stanley:
   skin: classic
+  favicon:
+    ico: /favicon.ico
+    svg: /favicon.svg
+    apple_touch: /apple-touch-icon.png
   social_links:
     - { platform: facebook, user_url: "https://facebook.com/jeffreypratt" }
     - { platform: github,   user_url: "https://github.com/jeffreyp" }
